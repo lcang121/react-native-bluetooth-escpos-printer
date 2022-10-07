@@ -34,6 +34,7 @@ Byte V[] = {0x56};//V
 Byte A[] = {0x61};//a
 Byte E[] = {0x45};//E
 Byte G[] = {0x47};//G
+// Byte i[] = {0x69};//i
 
 RCTPromiseResolveBlock pendingResolve;
 RCTPromiseRejectBlock pendingReject;
@@ -156,6 +157,46 @@ RCT_EXPORT_METHOD(printerUnderLine:(int)sp withResolver:(RCTPromiseResolveBlock)
     }
     
 }
+
+    RCT_EXPORT_METHOD(cutOnePoint: (RCTPromiseResolveBlock) resolve 
+                  rejecter:(RCTPromiseRejectBlock) reject)
+{
+    if(RNBluetoothManager.isConnected){
+        NSMutableData *data = [[NSMutableData alloc] init];
+        Byte i[] =  {'i'};
+        [data appendBytes:ESC length:1];
+        [data appendBytes:i length:1];
+        pendingReject = reject;
+        pendingResolve = resolve;
+        [RNBluetoothManager writeValue:data withDelegate:self];
+    }else{
+           reject(@"COMMAND_NOT_SEND",@"COMMAND_NOT_SEND",nil);
+    }
+} 
+
+   RCT_EXPORT_METHOD(openDrawer:(NSInteger) nMode time1:(NSInteger) nTime1 time2:(NSInteger) nTime2 
+   withResolver:(RCTPromiseResolveBlock) resolve 
+                  rejecter:(RCTPromiseRejectBlock) reject)
+{
+    if(RNBluetoothManager.isConnected){
+        NSMutableData *data = [[NSMutableData alloc] init];
+        Byte wew[] =  {0x70};
+        Byte ww[] =  {0x00};
+        Byte t1[] =  {0x25};
+        Byte t2[] =  {0x250};
+        [data appendBytes:ESC length:1];
+        [data appendBytes:wew length:1];
+        [data appendBytes:ww length:1];
+        [data appendBytes:t1 length:1];
+        [data appendBytes:t2 length:1];
+        pendingReject = reject;
+        pendingResolve = resolve;
+        [RNBluetoothManager writeValue:data withDelegate:self];
+    }else{
+           reject(@"COMMAND_NOT_SEND",@"COMMAND_NOT_SEND",nil);
+    }
+} 
+
 
 RCT_EXPORT_METHOD(printText:(NSString *) text withOptions:(NSDictionary *) options
                   resolver:(RCTPromiseResolveBlock) resolve rejecter:(RCTPromiseRejectBlock) reject)
