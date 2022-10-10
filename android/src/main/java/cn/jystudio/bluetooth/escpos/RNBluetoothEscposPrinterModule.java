@@ -132,13 +132,13 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
     @ReactMethod
     public void printText(String text, @Nullable  ReadableMap options, final Promise promise) {
         try {
-            String encoding = "GBK";
+            String encoding = "UTF-8";
             int codepage = 0;
             int widthTimes = 0;
             int heigthTimes=0;
             int fonttype=0;
             if(options!=null) {
-                encoding = options.hasKey("encoding") ? options.getString("encoding") : "GBK";
+                encoding = options.hasKey("encoding") ? options.getString("encoding") : "UTF-8";
                 codepage = options.hasKey("codepage") ? options.getInt("codepage") : 0;
                 widthTimes = options.hasKey("widthtimes") ? options.getInt("widthtimes") : 0;
                 heigthTimes = options.hasKey("heigthtimes") ? options.getInt("heigthtimes") : 0;
@@ -455,7 +455,7 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
          }catch (Exception e){
             Log.d(TAG, e.getMessage());
         }
-    }    
+    }
 
     private boolean sendDataByte(byte[] data) {
         if (data==null || mService.getState() != BluetoothService.STATE_CONNECTED) {
