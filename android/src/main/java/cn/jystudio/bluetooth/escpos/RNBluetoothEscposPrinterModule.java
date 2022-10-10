@@ -381,6 +381,16 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
             promise.reject("COMMAND_NOT_SEND");
         }
     }
+    
+     @ReactMethod
+    public void writeToDevice(String message, Promise promise) {
+        byte[] data = Base64.decode(message, Base64.DEFAULT);
+        if( sendDataByte(data)){
+          promise.resolve(null);
+        }else{
+          promise.reject("Printer not found.");
+      }
+    }
 
     @ReactMethod
     public void printQRCode(String content, int size, int correctionLevel, final Promise promise) {
