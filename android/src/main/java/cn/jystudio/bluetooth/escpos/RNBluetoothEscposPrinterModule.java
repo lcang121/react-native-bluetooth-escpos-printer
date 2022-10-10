@@ -154,7 +154,7 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
             if (sendDataByte(bytes)) {
                 promise.resolve(null);
             } else {
-                promise.reject("COMMAND_NOT_SEND");
+                promise.reject("Printer could not be detected.");
             }
         }catch (Exception e){
             promise.reject(e.getMessage(),e);
