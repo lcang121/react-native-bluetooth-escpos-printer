@@ -158,12 +158,13 @@ RCT_EXPORT_METHOD(printerUnderLine:(int)sp withResolver:(RCTPromiseResolveBlock)
     
 }
 
-    RCT_EXPORT_METHOD(cutOnePoint: (RCTPromiseResolveBlock) resolve 
-                  rejecter:(RCTPromiseRejectBlock) reject)
+RCT_EXPORT_METHOD(cutOnePoint: (RCTPromiseResolveBlock) resolve 
+                rejecter:(RCTPromiseRejectBlock) reject)
 {
     if(RNBluetoothManager.isConnected){
         NSMutableData *data = [[NSMutableData alloc] init];
         Byte i[] =  {'i'};
+        
         [data appendBytes:ESC length:1];
         [data appendBytes:i length:1];
         pendingReject = reject;
@@ -174,28 +175,23 @@ RCT_EXPORT_METHOD(printerUnderLine:(int)sp withResolver:(RCTPromiseResolveBlock)
     }
 } 
 
-   RCT_EXPORT_METHOD(openDrawer:(NSInteger) nMode time1:(NSInteger) nTime1 time2:(NSInteger) nTime2 
-   withResolver:(RCTPromiseResolveBlock) resolve 
-                  rejecter:(RCTPromiseRejectBlock) reject)
+RCT_EXPORT_METHOD(openDrawer:(RCTPromiseResolveBlock) resolve 
+                rejecter:(RCTPromiseRejectBlock) reject)
 {
-    if(RNBluetoothManager.isConnected){
+    if (RNBluetoothManager.isConnected) {
         NSMutableData *data = [[NSMutableData alloc] init];
-        Byte wew[] =  {0x70};
-        Byte ww[] =  {0x00};
-        Byte t1[] =  {0x25};
-        Byte t2[] =  {0x250};
-        [data appendBytes:ESC length:1];
-        [data appendBytes:wew length:1];
-        [data appendBytes:ww length:1];
-        [data appendBytes:t1 length:1];
-        [data appendBytes:t2 length:1];
+        
+        Byte bytes[] = {0x1b, 0x70, 0x00, 0x25, 0xc2, 0x90};
+        
+        [data appendBytes:bytes length:sizeof(bytes)];
+        
         pendingReject = reject;
         pendingResolve = resolve;
         [RNBluetoothManager writeValue:data withDelegate:self];
-    }else{
-           reject(@"COMMAND_NOT_SEND",@"COMMAND_NOT_SEND",nil);
+    } else {
+        reject(@"COMMAND_NOT_SEND", @"COMMAND_NOT_SEND", nil);
     }
-} 
+}
 
 
 RCT_EXPORT_METHOD(printText:(NSString *) text withOptions:(NSDictionary *) options
